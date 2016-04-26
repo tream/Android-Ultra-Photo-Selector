@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.photoselector" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="22" />
+
+    <!-- Include following permission if you load images from Internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Include following permission if you want to cache images on SD card -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application android:allowBackup="true" >
+        <activity
+            android:name="com.photoselector.ui.PhotoSelectorActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="图片选择" />
+        <activity
+            android:name="com.photoselector.ui.PhotoPreviewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="图片预览" />
+    </application>
+
+</manifest>
