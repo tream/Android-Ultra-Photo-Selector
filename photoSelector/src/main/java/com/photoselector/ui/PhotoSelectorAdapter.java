@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 
 import com.photoselector.R;
 import com.photoselector.model.PhotoModel;
@@ -24,7 +25,7 @@ public class PhotoSelectorAdapter extends MBaseAdapter<PhotoModel> {
     private int itemWidth;//单个item的宽度
     private int horizentalNum = 3;//单行显示数量,默认3
     private OnPhotoItemCheckedListener OnPhotoItemCheckedListener;
-    private ViewGroup.LayoutParams itemLayoutParams;
+    private AbsListView.LayoutParams itemLayoutParams;
     private OnItemClickListener onItemClickListener;
     private OnClickListener cameraListener;//不为null时显示拍照选项,为null时不显示
 
@@ -51,7 +52,7 @@ public class PhotoSelectorAdapter extends MBaseAdapter<PhotoModel> {
     public void setItemWidth(int horizentalNum, int screenWidth) {
         int horizentalSpace = context.getResources().getDimensionPixelSize(R.dimen.sticky_item_horizontalSpacing);
         this.itemWidth = (screenWidth - (horizentalSpace * (horizentalNum - 1))) / horizentalNum;
-        this.itemLayoutParams = new ViewGroup.LayoutParams(itemWidth, itemWidth);
+        this.itemLayoutParams = new AbsListView.LayoutParams(itemWidth, itemWidth);
     }
 
     @Override

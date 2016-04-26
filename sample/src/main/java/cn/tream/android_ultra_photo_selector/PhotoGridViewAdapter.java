@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 public class PhotoGridViewAdapter extends BaseAdapter {
 
     private int itemWidth;
-    private ViewGroup.LayoutParams itemLayoutParams;
+    private AbsListView.LayoutParams itemLayoutParams;
     private Context mContext;
     private ArrayList<PhotoModel> itemList = new ArrayList<>();
 
@@ -79,7 +80,7 @@ public class PhotoGridViewAdapter extends BaseAdapter {
     public void setItemWidth(int horizentalNum, int screenWidth) {
         int horizentalSpace = mContext.getResources().getDimensionPixelSize(com.photoselector.R.dimen.sticky_item_horizontalSpacing);
         this.itemWidth = (screenWidth - (horizentalSpace * (horizentalNum - 1))) / horizentalNum;
-        this.itemLayoutParams = new ViewGroup.LayoutParams(itemWidth, itemWidth);
+        this.itemLayoutParams = new AbsListView.LayoutParams(itemWidth, itemWidth);
     }
 
     public void setItemList(ArrayList<PhotoModel> itemList) {
