@@ -22,20 +22,20 @@ on your mobil phone. Selection image result is also preserved. See **AndroidMani
 > - **Select Images from Album**
 
 
-![Select Images](https://github.com/tream/Android-Ultra-Photo-Selector/tree/master/media/image1.png)
+![Select Images](https://github.com/tream/Android-Ultra-Photo-Selector/blob/master/media/image1.png)
 
 > - **Browsing all device folders that have images**
 
 
-![Browse Albums](https://github.com/tream/Android-Ultra-Photo-Selector/tree/master/media/image2.png)
+![Browse Albums](https://github.com/tream/Android-Ultra-Photo-Selector/blob/master/media/image2.png)
 
 > - **Preview & zoom selected images**
 
 
-![Preview selected Images](https://github.com/tream/Android-Ultra-Photo-Selector/tree/master/media/image3.png)
+![Preview selected Images](https://github.com/tream/Android-Ultra-Photo-Selector/blob/master/media/image3.png)
 
 
 > - **Sample.apk**
 
-![Sample.apk](https://github.com/tream/Android-Ultra-Photo-Selector/tree/master/media/Sample.apk)
+![Sample.apk](https://github.com/tream/Android-Ultra-Photo-Selector/tree/master/blob/Sample.apk)
 
