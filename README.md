@@ -35,7 +35,7 @@ on your mobil phone. Selection image result is also preserved. See **AndroidMani
 ![Preview selected Images](https://github.com/tream/Android-Ultra-Photo-Selector/blob/master/media/image3.jpg)
 
 
-> - **Sample.apk**
+> - **示例apk**
 
-![Sample.apk](https://github.com/tream/Android-Ultra-Photo-Selector/raw/master/blob/Sample.apk)
+[Sample.apk](https://github.com/tream/Android-Ultra-Photo-Selector/raw/master/media/Sample.apk)
 
