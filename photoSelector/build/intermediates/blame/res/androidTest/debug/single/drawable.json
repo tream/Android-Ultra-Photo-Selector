@@ -1,13 +1,5 @@
 [
     {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\bg_back_arrow_white_selector.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\bg_back_arrow_white_selector.xml"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_black_textcolor_selector.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_black_textcolor_selector.xml"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_back_selector.xml",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_back_selector.xml"
     },
@@ -16,68 +8,20 @@
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\bg_back_arrow_white_selector.xml"
     },
     {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_checkbox_selector.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_checkbox_selector.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\bg_dark_selector.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\bg_dark_selector.xml"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_camera_selector.xml",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_camera_selector.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_back_selector.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_back_selector.xml"
     },
     {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_green_selector_rectangle.xml",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_green_selector_rectangle.xml"
     },
     {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_checkbox_selector.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_checkbox_selector.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_green_selector_rectangle.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_green_selector_rectangle.xml"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\bg_dark_selector.xml",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\bg_dark_selector.xml"
     },
     {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_camera_selector.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_camera_selector.xml"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_green_selector_rectangle.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_green_selector_rectangle.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\bg_back_arrow_white_selector.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\bg_back_arrow_white_selector.xml"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\bg_dark_selector.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\bg_dark_selector.xml"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_back_selector.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_back_selector.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_black_textcolor_selector.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_black_textcolor_selector.xml"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_checkbox_selector.xml",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_checkbox_selector.xml"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_camera_selector.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable\\btn_camera_selector.xml"
     },
     {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\btn_black_textcolor_selector.xml",

@@ -4,36 +4,12 @@
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\src\\main\\res\\anim\\activity_alpha_action_in.xml"
     },
     {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_up.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\src\\main\\res\\anim\\translate_up.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_down_current.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\src\\main\\res\\anim\\translate_down_current.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_up_current.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\src\\main\\res\\anim\\translate_up_current.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_up.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\src\\main\\res\\anim\\translate_up.xml"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_up_current.xml",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\src\\main\\res\\anim\\translate_up_current.xml"
     },
     {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\pb_default.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\src\\main\\res\\anim\\pb_default.xml"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_down_current.xml",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\src\\main\\res\\anim\\translate_down_current.xml"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_up_current.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\src\\main\\res\\anim\\translate_up_current.xml"
     },
     {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_down.xml",
@@ -44,31 +20,7 @@
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\src\\main\\res\\anim\\pb_default.xml"
     },
     {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\pb_default.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\src\\main\\res\\anim\\pb_default.xml"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_down_current.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\src\\main\\res\\anim\\translate_down_current.xml"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_down.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\src\\main\\res\\anim\\translate_down.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_down.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\src\\main\\res\\anim\\translate_down.xml"
-    },
-    {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\activity_alpha_action_in.xml",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\src\\main\\res\\anim\\activity_alpha_action_in.xml"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\translate_up.xml",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\src\\main\\res\\anim\\translate_up.xml"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\release\\anim\\activity_alpha_action_in.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\src\\main\\res\\anim\\activity_alpha_action_in.xml"
     }
 ]

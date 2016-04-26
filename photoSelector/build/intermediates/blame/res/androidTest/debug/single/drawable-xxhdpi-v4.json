@@ -1,14 +1,6 @@
 [
     {
-        "merged": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\arrow.png",
-        "source": "D:\\workspace\\Android\\AndroidStudioProjects\\crmApp\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\arrow.png"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\arrow.png",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\arrow.png"
-    },
-    {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\arrow.png",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector2\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\arrow.png"
     }
 ]
