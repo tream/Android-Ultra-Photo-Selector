@@ -36,12 +36,12 @@
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_back_arrow_white_pressed.png"
     },
     {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_picture_loadfailed.png",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_picture_loadfailed.png"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\bg_title_normal.png",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\bg_title_normal.png"
+    },
+    {
+        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_picture_loadfailed.png",
+        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_picture_loadfailed.png"
     },
     {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\bg_title.png",

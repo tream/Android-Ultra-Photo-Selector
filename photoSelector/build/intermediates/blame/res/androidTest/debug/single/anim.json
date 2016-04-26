@@ -12,12 +12,12 @@
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\anim\\translate_up.xml"
     },
     {
-        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\pb_default.xml",
-        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\anim\\pb_default.xml"
-    },
-    {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\translate_down.xml",
         "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\anim\\translate_down.xml"
+    },
+    {
+        "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\pb_default.xml",
+        "source": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\bundles\\debug\\res\\anim\\pb_default.xml"
     },
     {
         "merged": "D:\\workspace\\gitBase\\Android-Ultra-Photo-Selector\\photoSelector\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\translate_down_current.xml",
