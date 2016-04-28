@@ -12,12 +12,14 @@
         <activity
             android:name="com.photoselector.ui.PhotoSelectorActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="图片选择" />
+            android:label="图片选择"
+            android:theme="@style/PhotoSelectorTheme" />
 
         <activity
             android:name="com.photoselector.ui.PhotoPreviewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="图片预览" />
+            android:label="图片预览"
+            android:theme="@style/PhotoSelectorTheme" />
     </application>
 
 </manifest>

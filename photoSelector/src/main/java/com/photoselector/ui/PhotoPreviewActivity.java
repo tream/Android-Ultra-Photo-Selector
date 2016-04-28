@@ -331,8 +331,13 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
                         .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
                 new AnimationUtil(getApplicationContext(), R.anim.translate_down)
                         .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutBottom);
+                //设置全屏
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 isHide = true;
             } else {
+                //取消全屏
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
                 new AnimationUtil(getApplicationContext(), R.anim.translate_down_current)
                         .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
                 new AnimationUtil(getApplicationContext(), R.anim.translate_up_current)

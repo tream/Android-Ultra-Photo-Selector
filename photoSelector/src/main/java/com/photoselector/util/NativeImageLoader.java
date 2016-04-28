@@ -3,15 +3,21 @@ package com.photoselector.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.LruCache;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -88,7 +94,7 @@ public class NativeImageLoader {
     /**
      * 加载原图，对图片不进行裁剪
      *
-     * @param path      文件路径
+     * @param path      文件路径(可以是网络路径及本地路径,网络路径以http开头,其他类型全部认为是本地路径)
      * @param mCallBack 回调
      */
     public void loadNativeImage(final String path, final NativeImageCallBack mCallBack) {
@@ -96,10 +102,10 @@ public class NativeImageLoader {
     }
 
     /**
-     * 此方法来加载本地图片，这里的mPoint是用来封装ImageView的宽和高，我们会根据ImageView控件的大小来裁剪Bitmap
+     * 此方法来加载图片，这里的mPoint是用来封装ImageView的宽和高，我们会根据ImageView控件的大小来裁剪Bitmap
      * 如果你不想裁剪图片，调用loadNativeImage(final String path, final NativeImageCallBack mCallBack)来加载
      *
-     * @param path      文件路径
+     * @param path      文件路径(可以是网络路径及本地路径,网络路径以http开头,其他类型全部认为是本地路径)
      * @param mPoint    图片截取的长宽高
      * @param saveCache 是否缓存图片
      * @param mCallBack 加载完成回调
@@ -146,7 +152,14 @@ public class NativeImageLoader {
 
                     //不存在时获取三级缓存即源文件
                     if (mBitmap == null) {
-                        mBitmap = decodeThumbBitmapForFile(path, point == null ? 0 : point.x, point == null ? 0 : point.y);
+                        Uri uri = Uri.parse(path);
+                        //判断是网络图片还是本地图片
+                        if (!TextUtils.isEmpty(uri.getScheme()) && uri.getScheme().contains("http")) {
+                            mBitmap = getNetWorkBitmap(path);
+                            option.useCache = true;//网络图片强制进行本地缓存
+                        } else {//本地图片
+                            mBitmap = decodeThumbBitmapForFile(path, point == null ? 0 : point.x, point == null ? 0 : point.y);
+                        }
                         //允许创建缓存文件时保存到二级缓存
                         if (option.useCache && mBitmap != null) {
                             writeBitMapToSDCache(cacheFilePath, mBitmap);//三级缓存中取出时才添加到二级缓存
@@ -309,5 +322,36 @@ public class NativeImageLoader {
         public NativeImageCallBack callBack;//回调对象
         public Bitmap bitmap;//加载的bitMap对象
         public boolean useCache = true;//是否缓存,默认开启缓存
+    }
+
+    /**
+     * 加载网络图片
+     *
+     * @param urlString 图片url地址
+     * @return BitMap
+     */
+    public Bitmap getNetWorkBitmap(String urlString) {
+        URL imgUrl = null;
+        Bitmap bitmap = null;
+        try {
+            imgUrl = new URL(urlString);
+            // 使用HttpURLConnection打开连接
+            HttpURLConnection urlConn = (HttpURLConnection) imgUrl
+                    .openConnection();
+            urlConn.setDoInput(true);
+            urlConn.connect();
+            // 将得到的数据转化成InputStream
+            InputStream is = urlConn.getInputStream();
+            // 将InputStream转换成Bitmap
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (MalformedURLException e) {
+            System.out.println("[getNetWorkBitmap->]MalformedURLException");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("[getNetWorkBitmap->]IOException");
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }
