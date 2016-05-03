@@ -56,6 +56,16 @@ public class PhotoSelectorAdapter extends MBaseAdapter<PhotoModel> {
     }
 
     @Override
+    public int getCount() {
+        //修正增加相机后item数量
+        if (cameraListener != null) {
+            return models.size() + 1;
+        } else {
+            return models.size();
+        }
+    }
+
+    @Override
     public Object getItem(int position) {
         if (null != cameraListener) {
             if (position == 0) {
