@@ -272,7 +272,7 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
         } else {
             callBack = new NativeImageLoader.NativeImageCallBack() {
                 @Override
-                public void onImageLoader(Bitmap bitmap, String path) {
+                public void onImageLoad(Bitmap bitmap, String path) {
                     if (photoPreviewMap.containsKey(this)) {
                         photoPreviewMap.get(this).setBitMap(bitmap);
                     }
@@ -285,7 +285,7 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getSize(point);
         //加载图片
-        nativeImageLoader.loadNativeImage(photoModel.getOriginalPath(), point, false, callBack);
+        nativeImageLoader.loadImageBitmap(photoModel.getOriginalPath(), point, false, callBack);
         return photoPreview;
     }
 

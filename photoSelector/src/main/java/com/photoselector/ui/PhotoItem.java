@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -91,13 +90,14 @@ public class PhotoItem extends LinearLayout implements OnCheckedChangeListener, 
 //                "file://" + photo.getOriginalPath(), ivPhoto);
         ivPhoto.setImageResource(R.drawable.ic_picture_loading);
         Point point = new Point(getLayoutParams().width, getLayoutParams().height);
-        NativeImageLoader.getInstance().loadNativeImage(photo.getOriginalPath(), point, true, nativeImageCallBack);
+        NativeImageLoader.getInstance().loadImage(photo.getOriginalPath(), point, true, ivPhoto);
+//        NativeImageLoader.getInstance().loadImageBitmap(photo.getOriginalPath(), point, true, nativeImageCallBack);
     }
 
     //加载图片的回调方法,利于复用,避免oom
     private NativeImageLoader.NativeImageCallBack nativeImageCallBack = new NativeImageLoader.NativeImageCallBack() {
         @Override
-        public void onImageLoader(Bitmap bitmap, String path) {
+        public void onImageLoad(Bitmap bitmap, String path) {
             if (path.equals(photo.getOriginalPath())) {
                 if (bitmap != null) {
                     ivPhoto.setImageBitmap(bitmap);

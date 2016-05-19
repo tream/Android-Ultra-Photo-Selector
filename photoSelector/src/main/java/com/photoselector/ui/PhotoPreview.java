@@ -60,22 +60,22 @@ public class PhotoPreview extends FrameLayout implements OnClickListener {
         this.photoModel = photoModel;
     }
 
-//    public void loadImage(PhotoModel photoModel) {
+//    public void loadImageBitmap(PhotoModel photoModel) {
 //        pbLoading.setVisibility(View.VISIBLE);
 //        this.photoModel = photoModel;
-//        Log.w("loadImage:", photoModel.getOriginalPath());
-////		loadImage("file://" + photoModel.getOriginalPath());
+//        Log.w("loadImageBitmap:", photoModel.getOriginalPath());
+////		loadImageBitmap("file://" + photoModel.getOriginalPath());
 //        //获取屏幕分辨率,设置为加载大图片的大小
 //        Point point = new Point();
 //        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
 //        wm.getDefaultDisplay().getSize(point);
-//        NativeImageLoader.getInstance().loadNativeImage(photoModel.getOriginalPath(), point, false, nativeImageCallBack);
+//        NativeImageLoader.getInstance().loadImageBitmap(photoModel.getOriginalPath(), point, false, nativeImageCallBack);
 //    }
 //
 //    //加载图片的回调方法
 //    private NativeImageLoader.NativeImageCallBack nativeImageCallBack = new NativeImageLoader.NativeImageCallBack() {
 //        @Override
-//        public void onImageLoader(Bitmap bitmap, String path) {
+//        public void onImageLoad(Bitmap bitmap, String path) {
 //            if (path.equals(photoModel.getOriginalPath())) {
 //                ivContent.setImageBitmap(bitmap);
 //                pbLoading.setVisibility(View.GONE);
@@ -83,8 +83,8 @@ public class PhotoPreview extends FrameLayout implements OnClickListener {
 //        }
 //    };
 
-//    private void loadImage(String path) {
-//		ImageLoader.getInstance().loadImage(path, new SimpleImageLoadingListener() {
+//    private void loadImageBitmap(String path) {
+//		ImageLoader.getInstance().loadImageBitmap(path, new SimpleImageLoadingListener() {
 //			@Override
 //			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 //				ivContent.setImageBitmap(loadedImage);

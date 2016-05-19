@@ -49,9 +49,9 @@ public class AlbumItem extends LinearLayout {
      */
     public void setAlbumImage(String path) {
 //		ImageLoader.getInstance().displayImage("file://" + path, ivAlbum);
-        NativeImageLoader.getInstance().loadNativeImage(path, new Point(200, 200), true, new NativeImageLoader.NativeImageCallBack() {
+        NativeImageLoader.getInstance().loadImageBitmap(path, new Point(200, 200), true, new NativeImageLoader.NativeImageCallBack() {
             @Override
-            public void onImageLoader(Bitmap bitmap, String path) {
+            public void onImageLoad(Bitmap bitmap, String path) {
                 ivAlbum.setImageBitmap(bitmap);
             }
         });

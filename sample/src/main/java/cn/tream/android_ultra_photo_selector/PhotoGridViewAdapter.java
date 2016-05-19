@@ -60,9 +60,9 @@ public class PhotoGridViewAdapter extends BaseAdapter {
         }
         final ImageView finalView = imageView;
         imageView.setImageResource(R.drawable.ic_picture_loading);
-        NativeImageLoader.getInstance().loadNativeImage(itemList.get(i).getOriginalPath(), new Point(itemWidth, itemWidth), true, new NativeImageLoader.NativeImageCallBack() {
+        NativeImageLoader.getInstance().loadImageBitmap(itemList.get(i).getOriginalPath(), new Point(itemWidth, itemWidth), true, new NativeImageLoader.NativeImageCallBack() {
             @Override
-            public void onImageLoader(Bitmap bitmap, String path) {
+            public void onImageLoad(Bitmap bitmap, String path) {
                 if (path.equals(itemList.get(i).getOriginalPath())) {
                     finalView.setImageBitmap(bitmap);
                 }
