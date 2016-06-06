@@ -11,4 +11,6 @@
     <string name="max_img_limit_reached">不能选择超过%d个图像</string>
     <string name="select">选择</string>
 
+    <string name="clipping_image">裁剪图片</string>
+
 </resources>

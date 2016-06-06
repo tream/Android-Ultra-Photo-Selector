@@ -1,5 +1,6 @@
 package com.photoselector.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -8,6 +9,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.LruCache;
 import android.widget.ImageView;
 
@@ -19,7 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Map;
@@ -34,18 +35,22 @@ import java.util.concurrent.Executors;
  * @Date 2016/4/14 0014 10:26
  */
 public class NativeImageLoader {
+    private static String TAG = "NativeImageLoader";
     //默认缓存文件路径
     private static String photoCacheDir = Environment.getExternalStorageDirectory() + "/temp/PhotoSelector/localPic/";
-    private LruCache<String, Bitmap> mMemoryCache;//lru一级缓存
     private static NativeImageLoader nativeImageLoader;
-    private Map<NativeImageCallBack, NativeImageLoaderOption> loadMap = new Hashtable<>();//使用hashMap快速滑动时出现线程同步异常
-    private int currentTaskSize;
     private static int maxTaskSize = 5;//最大加载图片线程数
     private static int maxLruCache;//最大内存缓存容量
-    private ExecutorService mImageThreadPool = Executors.newFixedThreadPool(5);//图片加载线程池,
     private static int mDefaultImage = R.drawable.ic_picture_loading;//加载过程中显示的默认图片
     private static int mFailedImage = R.drawable.ic_picture_loadfailed;//加载失败设置的图片
+    private LruCache<String, Bitmap> mMemoryCache;//lru一级缓存
+    private Map<NativeImageCallBack, NativeImageLoaderOption> loadMap = new Hashtable<>();//使用hashMap快速滑动时出现线程同步异常
+    private int currentTaskSize;
+    private ExecutorService mImageThreadPool = Executors.newFixedThreadPool(5);//图片加载线程池,
     private int timeToClearMemoryCache;//此时间结束后图片加载器不活动就清除静态对象,使系统可以回收缓存(秒)
+    private int cacheTime = 0;//缓存时间(秒)
+    private Context mContext;
+
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -57,25 +62,42 @@ public class NativeImageLoader {
             return true;
         }
     });
+    private Map<ImageView, NativeImageCallBack> imageTaskMap = new Hashtable<>();
 
-    private NativeImageLoader() {
+    private NativeImageLoader(Context context) {
+        this.mContext = context.getApplicationContext();
         setMaxLruCache(maxLruCache);
         resetKillSelfTime();//初始化自杀时间
         mHandler.postDelayed(new KillSelfRunnable(), 1000 * 5);//启动自杀任务,每5秒判断一次
     }
 
-    //超时不活跃自杀任务
-    private class KillSelfRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            timeToClearMemoryCache = timeToClearMemoryCache - 5;
-            if (timeToClearMemoryCache < 0) {
-                nativeImageLoader = null;
-            } else {
-                mHandler.postDelayed(new KillSelfRunnable(), 1000 * 5);//递归自杀任务
-            }
+    /**
+     * 通过此方法来获取NativeImageLoader的实例
+     *
+     * @param context
+     * @return
+     */
+    public static NativeImageLoader getInstance(Context context) {
+        if (nativeImageLoader == null) {
+            nativeImageLoader = new NativeImageLoader(context);
         }
+        return nativeImageLoader;
+    }
+
+    /**
+     * 获取缓存文件路径
+     *
+     * @param path  源文件路径
+     * @param point 要压缩到的分辨率
+     * @return 格式化后的缓存文件地址
+     */
+    public static String getCacheFilePath(String path, Point point) {
+        String cacheFileName = CommonUtils.getMd5Encode(path + (point != null ? point.hashCode() : ""));//获取MD5加密文件名
+        File file = new File(photoCacheDir);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return photoCacheDir + cacheFileName;
     }
 
     //重置自杀时间
@@ -110,25 +132,13 @@ public class NativeImageLoader {
     }
 
     /**
-     * 通过此方法来获取NativeImageLoader的实例
-     *
-     * @return
-     */
-    public static NativeImageLoader getInstance() {
-        if (nativeImageLoader == null) {
-            nativeImageLoader = new NativeImageLoader();
-        }
-        return nativeImageLoader;
-    }
-
-    /**
      * 加载原图，对图片不进行裁剪;大图慎用,易引发OOM!
      *
      * @param path      文件路径(可以是网络路径及本地路径,网络路径以http开头,本地路径直接给绝对路径就行)
      * @param mCallBack 回调
      */
     public void loadImageBitmap(final String path, final NativeImageCallBack mCallBack) {
-        this.loadImageBitmap(path, null, false, mCallBack);
+        this.loadImageBitmap(path, null, false, 0, mCallBack);
     }
 
     /**
@@ -137,16 +147,17 @@ public class NativeImageLoader {
      *
      * @param path                文件路径(可以是网络路径及本地路径,网络路径以http开头,其他类型全部认为是本地路径)
      * @param mPoint              图片截取的长宽高
-     * @param saveCache           是否缓存图片
+     * @param useCache            是否缓存图片
      * @param nativeImageCallBack 加载完成回调
      */
-    public void loadImageBitmap(String path, Point mPoint, boolean saveCache, NativeImageCallBack nativeImageCallBack) {
+    public void loadImageBitmap(String path, Point mPoint, boolean useCache, int cacheTime, NativeImageCallBack nativeImageCallBack) {
         resetKillSelfTime();//重置自杀任务时间
         NativeImageLoaderOption option = new NativeImageLoaderOption();
         option.path = path;
         option.point = mPoint;
         option.callBack = nativeImageCallBack;
-        option.useCache = saveCache;
+        option.useCache = useCache;
+        option.cacheTime = cacheTime;
 
         //添加到任务队列
         loadMap.put(nativeImageCallBack, option);
@@ -160,7 +171,7 @@ public class NativeImageLoader {
      * @param imageView 要设置图片的ImageView对象
      */
     public void loadImage(String path, final ImageView imageView) {
-        loadImage(path, null, false, imageView);
+        loadImage(path, null, false, 0, imageView);
     }
 
     /**
@@ -168,10 +179,10 @@ public class NativeImageLoader {
      *
      * @param path      文件路径(可以是网络路径及本地路径,网络路径以http开头,本地路径直接给绝对路径就行)
      * @param mPoint    图片截取的长宽高
-     * @param saveCache 是否缓存图片
+     * @param useCache  是否缓存图片
      * @param imageView 要设置图片的ImageView对象
      */
-    public void loadImage(String path, Point mPoint, boolean saveCache, final ImageView imageView) {
+    public void loadImage(String path, Point mPoint, boolean useCache, int cacheTime, final ImageView imageView) {
         if (mDefaultImage > 0) {
             imageView.setImageResource(mDefaultImage);
         }
@@ -200,10 +211,8 @@ public class NativeImageLoader {
             };
             imageTaskMap.put(imageView, callBack);
         }
-        loadImageBitmap(path, mPoint, saveCache, callBack);
+        loadImageBitmap(path, mPoint, useCache, cacheTime, callBack);
     }
-
-    private Map<ImageView, NativeImageCallBack> imageTaskMap = new Hashtable<>();
 
     //继续加载下一张图片
     private synchronized void loadNext() {
@@ -220,33 +229,65 @@ public class NativeImageLoader {
             mImageThreadPool.execute(new Runnable() {
                 @Override
                 public void run() {
-                    Bitmap mBitmap;
+                    Bitmap mBitmap = null;
                     //获取缓存文件路径
-                    String cacheFilePath = getCacheFilePath(path, point);
-                    //先获取一级缓存内存中是否有缓存的Bitmap
-                    Bitmap bitmap = getBitmapFromMemCache(cacheFilePath);
-                    //若该Bitmap不在内存缓存中
-                    if (bitmap == null) {
-                        //检索二级缓存即SD卡中是否存在截取好的缩略图
-                        mBitmap = getBitMapFromSDCache(cacheFilePath);
-                    } else {
-                        mBitmap = bitmap;
+                    String cacheFilePath = "";
+                    Bitmap bitmap = null;
+                    Uri imageUri = Uri.parse(path);
+
+                    //是否使用缓存
+                    if (option.useCache) {
+                        cacheFilePath = getCacheFilePath(path, point);
+                        File cacheFile = new File(cacheFilePath);
+                        boolean clearCache = false;
+
+                        if (option.cacheTime > 0//需要清理缓存
+                                && cacheFile.exists()//缓存存在
+                                && (System.currentTimeMillis() - cacheFile.lastModified()) > option.cacheTime * 1000//缓存已过期
+                                ) {
+                            clearCache = true;
+                            //网络图片无网络连接时不清理
+                            if (!TextUtils.isEmpty(imageUri.getScheme()) && imageUri.getScheme().contains("http") && !CommonUtils.hasConnectedNetwork(mContext)) {
+                                clearCache = false;
+                            }
+                        }
+
+                        //需要清理缓存时清理,不需要时读取缓存
+                        if (clearCache) {
+                            clearPictureCache(path, point);
+                        } else {//其他情况时使用缓存
+                            //先获取一级缓存内存中是否有缓存的Bitmap
+                            bitmap = getBitmapFromMemCache(cacheFilePath);
+                            //若该Bitmap不在内存缓存中
+                            if (bitmap == null) {
+                                //检索二级缓存即SD卡中是否存在截取好的缩略图
+                                mBitmap = getBitMapFromSDCache(cacheFilePath);
+                            } else {
+                                mBitmap = bitmap;
+                            }
+                        }
                     }
 
                     //不存在时获取三级缓存即源文件
                     if (mBitmap == null) {
-                        Uri uri = Uri.parse(path);
                         //判断是网络图片还是本地图片
-                        if (!TextUtils.isEmpty(uri.getScheme()) && uri.getScheme().contains("http")) {
+                        if (!TextUtils.isEmpty(imageUri.getScheme()) && imageUri.getScheme().contains("http")) {
                             mBitmap = getNetWorkBitmap(path);
-                            option.useCache = true;//网络图片强制进行本地缓存
+//                            option.useCache = true;//网络图片强制进行本地缓存,取消,2016-06-03
                         } else {//本地图片
                             mBitmap = decodeThumbBitmapForFile(path, point == null ? 0 : point.x, point == null ? 0 : point.y);
+                            if (point == null) option.useCache = false;//加载本地原图时不使用sd卡缓存
                         }
+
                         //允许创建缓存文件时保存到二级缓存
                         if (option.useCache && mBitmap != null) {
                             writeBitMapToSDCache(cacheFilePath, mBitmap);//三级缓存中取出时才添加到二级缓存
                         }
+                    }
+
+                    //将图片加入到内存缓存
+                    if (option.useCache && bitmap == null && mBitmap != null) {
+                        addBitmapToMemoryCache(cacheFilePath, mBitmap);
                     }
 
                     Message msg = mHandler.obtainMessage();
@@ -254,15 +295,23 @@ public class NativeImageLoader {
                     option.bitmap = mBitmap;
                     mHandler.sendMessage(msg);
 
-                    //将图片加入到内存缓存
-                    if (bitmap == null) {
-                        addBitmapToMemoryCache(cacheFilePath, mBitmap);
-                    }
                     currentTaskSize--;
                     loadNext();
                 }
             });
         }
+    }
+
+    /**
+     * 清除图片的一,二级缓存
+     *
+     * @param path  图片路径
+     * @param point 图片压缩参数
+     */
+    public void clearPictureCache(String path, Point point) {
+        String cachePath = getCacheFilePath(path, point);
+        removeBitmapFromMemCache(cachePath);
+        removeBitMapFromSDCache(cachePath);
     }
 
     /**
@@ -288,6 +337,16 @@ public class NativeImageLoader {
     }
 
     /**
+     * 一级缓存,根据key来获取内存中的图片
+     *
+     * @param key
+     * @return
+     */
+    private Bitmap removeBitmapFromMemCache(String key) {
+        return mMemoryCache.remove(key);
+    }
+
+    /**
      * 二级缓存,将压缩后的缩略图写如SD卡
      *
      * @param path
@@ -302,22 +361,6 @@ public class NativeImageLoader {
     }
 
     /**
-     * 获取缓存文件路径
-     *
-     * @param path  源文件路径
-     * @param point 要压缩到的分辨率
-     * @return 格式化后的缓存文件地址
-     */
-    public String getCacheFilePath(String path, Point point) {
-        String cacheFileName = CommonUtils.getMd5Encode(path + (point != null ? point.hashCode() : ""));//获取MD5加密文件名
-        File file = new File(photoCacheDir);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        return photoCacheDir + cacheFileName;
-    }
-
-    /**
      * 二级缓存,读取SD卡中缓存的缩略图
      *
      * @param cachePath
@@ -328,8 +371,20 @@ public class NativeImageLoader {
         try {
             return BitmapFactory.decodeStream(new FileInputStream(cachePath));
         } catch (FileNotFoundException e) {
+            Log.w(TAG, "cache file not found!");
         }
         return null;
+    }
+
+    /**
+     * 清除二级缓存
+     *
+     * @param cachePath
+     * @return
+     */
+    private boolean removeBitMapFromSDCache(String cachePath) {
+        File file = new File(cachePath);
+        return !file.exists() || file.delete();
     }
 
     /**
@@ -380,33 +435,6 @@ public class NativeImageLoader {
         return inSampleSize;
     }
 
-
-    /**
-     * 加载本地图片的回调接口
-     *
-     * @author xiaanming
-     */
-    public interface NativeImageCallBack {
-        /**
-         * 当子线程加载完了本地的图片，将Bitmap和图片路径回调在此方法中
-         *
-         * @param bitmap
-         * @param path
-         */
-        void onImageLoad(Bitmap bitmap, String path);
-    }
-
-    /**
-     * 用于handler中传递的对象
-     */
-    private class NativeImageLoaderOption {
-        public String path;//图片路径
-        public Point point;//图片宽高尺寸
-        public NativeImageCallBack callBack;//回调对象
-        public Bitmap bitmap;//加载的bitMap对象
-        public boolean useCache = true;//是否缓存,默认开启缓存
-    }
-
     /**
      * 加载网络图片
      *
@@ -428,13 +456,51 @@ public class NativeImageLoader {
             // 将InputStream转换成Bitmap
             bitmap = BitmapFactory.decodeStream(is);
             is.close();
-        } catch (MalformedURLException e) {
-            System.out.println("[getNetWorkBitmap->]MalformedURLException");
-            e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("[getNetWorkBitmap->]IOException");
-            e.printStackTrace();
+            Log.w(TAG, "network file not found!");
         }
         return bitmap;
+    }
+
+
+    /**
+     * 加载本地图片的回调接口
+     *
+     * @author xiaanming
+     */
+    public interface NativeImageCallBack {
+        /**
+         * 当子线程加载完了本地的图片，将Bitmap和图片路径回调在此方法中
+         *
+         * @param bitmap
+         * @param path
+         */
+        void onImageLoad(Bitmap bitmap, String path);
+    }
+
+    //超时不活跃自杀任务
+    private class KillSelfRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            timeToClearMemoryCache = timeToClearMemoryCache - 5;
+            if (timeToClearMemoryCache < 0) {
+                nativeImageLoader = null;
+            } else {
+                mHandler.postDelayed(new KillSelfRunnable(), 1000 * 5);//递归自杀任务
+            }
+        }
+    }
+
+    /**
+     * 用于handler中传递的对象
+     */
+    private class NativeImageLoaderOption {
+        public String path;//图片路径
+        public Point point;//图片宽高尺寸
+        public NativeImageCallBack callBack;//回调对象
+        public Bitmap bitmap;//加载的bitMap对象
+        public boolean useCache = true;//是否缓存,默认开启缓存
+        public int cacheTime = 0;//使用缓存时缓存时间,0为无限期缓存
     }
 }

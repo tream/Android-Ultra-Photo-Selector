@@ -11,4 +11,6 @@
     <string name="max_img_limit_reached">Cannot select more than %d images</string>
     <string name="select">Select</string>
 
+    <string name="clipping_image">Clipping image </string>
+
 </resources>

@@ -9,7 +9,6 @@ import android.widget.AbsListView;
 import com.photoselector.R;
 import com.photoselector.model.PhotoModel;
 import com.photoselector.ui.PhotoItem.OnItemClickListener;
-import com.photoselector.ui.PhotoItem.OnPhotoItemCheckedListener;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ public class PhotoSelectorAdapter extends MBaseAdapter<PhotoModel> {
 
     private int itemWidth;//单个item的宽度
     private int horizentalNum = 3;//单行显示数量,默认3
-    private OnPhotoItemCheckedListener OnPhotoItemCheckedListener;
+    private PhotoItem.OnPhotoItemCheckedListener OnPhotoItemCheckedListener;
     private AbsListView.LayoutParams itemLayoutParams;
     private OnItemClickListener onItemClickListener;
     private OnClickListener cameraListener;//不为null时显示拍照选项,为null时不显示
@@ -33,7 +32,7 @@ public class PhotoSelectorAdapter extends MBaseAdapter<PhotoModel> {
         super(context, models);
     }
 
-    public PhotoSelectorAdapter(Context context, ArrayList<PhotoModel> models, int screenWidth, OnPhotoItemCheckedListener onPhotoItemCheckedListener, OnItemClickListener OnItemClickListener,
+    public PhotoSelectorAdapter(Context context, ArrayList<PhotoModel> models, int screenWidth, PhotoItem.OnPhotoItemCheckedListener onPhotoItemCheckedListener, OnItemClickListener OnItemClickListener,
                                 OnClickListener cameraListener) {
         this(context, models);
         setItemWidth(horizentalNum, screenWidth);
@@ -57,7 +56,6 @@ public class PhotoSelectorAdapter extends MBaseAdapter<PhotoModel> {
 
     @Override
     public int getCount() {
-        //修正增加相机后item数量
         if (cameraListener != null) {
             return models.size() + 1;
         } else {

@@ -35,6 +35,20 @@ public class PhotoItem extends LinearLayout implements OnCheckedChangeListener, 
     private OnItemClickListener l;
     private int position;
     private boolean isShowCheck;
+    //加载图片的回调方法,利于复用,避免oom
+    private NativeImageLoader.NativeImageCallBack nativeImageCallBack = new NativeImageLoader.NativeImageCallBack() {
+        @Override
+        public void onImageLoad(Bitmap bitmap, String path) {
+            if (path.equals(photo.getOriginalPath())) {
+                if (bitmap != null) {
+                    ivPhoto.setImageBitmap(bitmap);
+                } else {
+                    ivPhoto.setImageResource(R.drawable.ic_picture_loadfailed);
+                }
+
+            }
+        }
+    };
 
     private PhotoItem(Context context) {
         super(context);
@@ -74,7 +88,6 @@ public class PhotoItem extends LinearLayout implements OnCheckedChangeListener, 
         photo.setChecked(isChecked);
     }
 
-
     /**
      * 设置路径下的图片对应的缩略图
      */
@@ -90,24 +103,8 @@ public class PhotoItem extends LinearLayout implements OnCheckedChangeListener, 
 //                "file://" + photo.getOriginalPath(), ivPhoto);
         ivPhoto.setImageResource(R.drawable.ic_picture_loading);
         Point point = new Point(getLayoutParams().width, getLayoutParams().height);
-        NativeImageLoader.getInstance().loadImage(photo.getOriginalPath(), point, true, ivPhoto);
-//        NativeImageLoader.getInstance().loadImageBitmap(photo.getOriginalPath(), point, true, nativeImageCallBack);
+        NativeImageLoader.getInstance(getContext()).loadImageBitmap(photo.getOriginalPath(), point, true, 0, nativeImageCallBack);
     }
-
-    //加载图片的回调方法,利于复用,避免oom
-    private NativeImageLoader.NativeImageCallBack nativeImageCallBack = new NativeImageLoader.NativeImageCallBack() {
-        @Override
-        public void onImageLoad(Bitmap bitmap, String path) {
-            if (path.equals(photo.getOriginalPath())) {
-                if (bitmap != null) {
-                    ivPhoto.setImageBitmap(bitmap);
-                } else {
-                    ivPhoto.setImageResource(R.drawable.ic_picture_loadfailed);
-                }
-
-            }
-        }
-    };
 
     private void setDrawingable() {
         ivPhoto.setDrawingCacheEnabled(true);
@@ -129,20 +126,6 @@ public class PhotoItem extends LinearLayout implements OnCheckedChangeListener, 
         this.position = position;
     }
 
-    /**
-     * 图片Item选中事件监听器
-     */
-    public interface OnPhotoItemCheckedListener {
-        boolean onCheckedChanged(PhotoModel photoModel, CompoundButton buttonView, boolean isChecked);
-    }
-
-    /**
-     * 图片点击事件
-     */
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
     //图片长按事件
     @Override
     public boolean onLongClick(View v) {
@@ -158,5 +141,19 @@ public class PhotoItem extends LinearLayout implements OnCheckedChangeListener, 
             if (l != null)
                 l.onItemClick(position);
         }
+    }
+
+    /**
+     * 图片Item选中事件监听器
+     */
+    public interface OnPhotoItemCheckedListener {
+        boolean onCheckedChanged(PhotoModel photoModel, CompoundButton buttonView, boolean isChecked);
+    }
+
+    /**
+     * 图片点击事件
+     */
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 }

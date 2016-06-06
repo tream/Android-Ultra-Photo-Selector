@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#aaaaaa"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/hl_head_ar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/layout_title_heigh"
+        android:layout_alignParentTop="true"
+        android:background="@color/bg">
+
+        <LinearLayout
+            android:id="@+id/bv_back_lh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_back_vb"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/arrow" />
+
+            <TextView
+                android:id="@+id/tv_title_vb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:text="@string/back"
+                android:textColor="#FEFEFE"
+                android:textSize="@dimen/layout_title_mini_textsize"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_title_lh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:text="@string/clipping_image"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btn_right_lh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/transparent"
+            android:minWidth="50dp"
+            android:text="@string/done"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/layout_title_mini_textsize" />
+    </RelativeLayout>
+
+    <com.clipImage.ClipImageLayout
+        android:id="@+id/clipImageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

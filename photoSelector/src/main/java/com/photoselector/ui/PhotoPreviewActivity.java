@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -49,57 +50,88 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
     public static final String ALBUM = "album";//相册名称
     public static final String POSITION = "position";//当前position
     public static final String SELECTED = "selected";//已选择图片列表
-
-    private ViewPager mViewPager;//ViewPager轮播对象
-    private RelativeLayout layoutTop;//头布局
     protected RelativeLayout layoutBottom;//尾布局
-    private ImageButton btnBack;
-    private TextView tvPercent;//当前显示进度
     protected Button btnDone;
     protected CheckBox cbDone;//选择
     protected List<PhotoModel> photos;//当前界面轮播的图像列表
-
     protected ArrayList<PhotoModel> selected = new ArrayList<>();//当前选择的图片列表
     protected int MAX_IMAGE = 9;//最大图片选择数量
     protected int current;//当前位置
     protected Map<NativeImageLoader.NativeImageCallBack, PhotoPreview> photoPreviewMap = new Hashtable<>();//当前PhotoPreview对象集合
     protected NativeImageLoader nativeImageLoader;
+    protected boolean isHide;
+    private ViewPager mViewPager;//ViewPager轮播对象
+    private RelativeLayout layoutTop;//头布局
+    private ImageButton btnBack;
+    private TextView tvPercent;//当前显示进度
     private PhotoSelectorDomain photoSelectorDomain;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);// 设置页面主题类型
-        setContentView(R.layout.activity_photopreview);
-        layoutTop = (RelativeLayout) findViewById(R.id.layout_top_app);
-        btnBack = (ImageButton) findViewById(R.id.btn_back_app);
-        tvPercent = (TextView) findViewById(R.id.tv_percent_app);
-        mViewPager = (ViewPager) findViewById(R.id.vp_base_app);
-        layoutBottom = (RelativeLayout) findViewById(R.id.layout_bottom_app);
-        btnDone = (Button) findViewById(R.id.btn_photo_preview_done);
-        btnDone.setOnClickListener(this);
-        cbDone = (CheckBox) findViewById(R.id.cb_photo_preview_select);
-        cbDone.setOnCheckedChangeListener(this);
-
-        btnBack.setOnClickListener(this);
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                current = position;
-                //更新当前位置刷新
-                updatePercent();
+    private NativeImageLoader.NativeImageCallBack nativeImageCallBack;//空闲的图片加载回调
+    /**
+     * 单击图片时全屏看图(显示隐藏title栏)
+     */
+    private OnClickListener photoItemClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!isHide) {
+                //隐藏上下工具栏
+                new AnimationUtil(getApplicationContext(), R.anim.translate_up)
+                        .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
+                new AnimationUtil(getApplicationContext(), R.anim.translate_down)
+                        .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutBottom);
+                //设置全屏
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                isHide = true;
+            } else {
+                //取消全屏
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+                //显示工具栏
+                new AnimationUtil(getApplicationContext(), R.anim.translate_down_current)
+                        .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
+                new AnimationUtil(getApplicationContext(), R.anim.translate_up_current)
+                        .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutBottom);
+                isHide = false;
             }
-        });
+        }
+    };
+    //轮播图页面适配器
+    private PagerAdapter mPagerAdapter = new PagerAdapter() {
 
-        nativeImageLoader = NativeImageLoader.getInstance().setMaxTaskSize(1);//初始化ImageLoader
+        @Override
+        public int getCount() {
+            if (photos == null) {
+                return 0;
+            } else {
+                return photos.size();
+            }
+        }
 
-        overridePendingTransition(R.anim.activity_alpha_action_in, 0); // 加载进入动画
+        @Override
+        public View instantiateItem(final ViewGroup container, final int position) {
+            PhotoPreview photoPreview = getPhotoPreview(photos.get(position));
+            container.addView(photoPreview);
+            photoPreview.setOnClickListener(photoItemClickListener);
+            return photoPreview;
+        }
 
-        photoSelectorDomain = new PhotoSelectorDomain(getApplicationContext());
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            PhotoPreview photoPreview = (PhotoPreview) object;
+            for (NativeImageLoader.NativeImageCallBack callBack : photoPreviewMap.keySet()) {
+                if (photoPreviewMap.get(callBack) == photoPreview) {
+                    nativeImageCallBack = callBack;
+                    break;
+                }
+            }
+            container.removeView(photoPreview);
+        }
 
-        init(getIntent().getExtras());
-    }
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+    };
 
     /**
      * 展示指定图片列表
@@ -161,6 +193,41 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
         return bundle;
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);// 设置页面主题类型
+        setContentView(R.layout.activity_photopreview);
+        layoutTop = (RelativeLayout) findViewById(R.id.layout_top_app);
+        btnBack = (ImageButton) findViewById(R.id.btn_back_app);
+        tvPercent = (TextView) findViewById(R.id.tv_percent_app);
+        mViewPager = (ViewPager) findViewById(R.id.vp_base_app);
+        layoutBottom = (RelativeLayout) findViewById(R.id.layout_bottom_app);
+        btnDone = (Button) findViewById(R.id.btn_photo_preview_done);
+        btnDone.setOnClickListener(this);
+        cbDone = (CheckBox) findViewById(R.id.cb_photo_preview_select);
+        cbDone.setOnCheckedChangeListener(this);
+
+        btnBack.setOnClickListener(this);
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                current = position;
+                //更新当前位置刷新
+                updatePercent();
+            }
+        });
+
+        nativeImageLoader = NativeImageLoader.getInstance(getApplicationContext()).setMaxTaskSize(1);//初始化ImageLoader
+
+        overridePendingTransition(R.anim.activity_alpha_action_in, 0); // 加载进入动画
+
+        photoSelectorDomain = new PhotoSelectorDomain(getApplicationContext());
+
+        init(getIntent().getExtras());
+    }
+
     protected void init(Bundle extras) {
         if (extras == null)
             return;
@@ -192,6 +259,13 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
             btnDone.setVisibility(View.GONE);
             layoutBottom.setVisibility(View.GONE);
         }
+
+        //当最大选取数为1时,不显示下方的选择条
+        if (MAX_IMAGE == 1) {
+            layoutBottom.setVisibility(View.GONE);
+            selected.clear();
+            updateSelectedText();//更新完成按钮显示文本
+        }
     }
 
     //加载相册图片回调
@@ -220,47 +294,6 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
         mViewPager.setCurrentItem(current);
     }
 
-    //轮播图页面适配器
-    private PagerAdapter mPagerAdapter = new PagerAdapter() {
-
-        @Override
-        public int getCount() {
-            if (photos == null) {
-                return 0;
-            } else {
-                return photos.size();
-            }
-        }
-
-        @Override
-        public View instantiateItem(final ViewGroup container, final int position) {
-            PhotoPreview photoPreview = getPhotoPreview(photos.get(position));
-            container.addView(photoPreview);
-            photoPreview.setOnClickListener(photoItemClickListener);
-            return photoPreview;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            PhotoPreview photoPreview = (PhotoPreview) object;
-            for (NativeImageLoader.NativeImageCallBack callBack : photoPreviewMap.keySet()) {
-                if (photoPreviewMap.get(callBack) == photoPreview) {
-                    nativeImageCallBack = callBack;
-                    break;
-                }
-            }
-            container.removeView(photoPreview);
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-    };
-
-    private NativeImageLoader.NativeImageCallBack nativeImageCallBack;//空闲的图片加载回调
-
     //添加viewPager复用机制,放置快速滑动时导致内存溢出(view)
     protected synchronized PhotoPreview getPhotoPreview(PhotoModel photoModel) {
         PhotoPreview photoPreview = new PhotoPreview(this);
@@ -274,7 +307,11 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
                 @Override
                 public void onImageLoad(Bitmap bitmap, String path) {
                     if (photoPreviewMap.containsKey(this)) {
-                        photoPreviewMap.get(this).setBitMap(bitmap);
+                        if (bitmap != null) {
+                            photoPreviewMap.get(this).setBitMap(bitmap);
+                        } else {
+                            photoPreviewMap.get(this).setBitMap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_picture_loadfailed));
+                        }
                     }
                 }
             };
@@ -285,11 +322,9 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getSize(point);
         //加载图片
-        nativeImageLoader.loadImageBitmap(photoModel.getOriginalPath(), point, false, callBack);
+        nativeImageLoader.loadImageBitmap(photoModel.getOriginalPath(), point, false, 0, callBack);
         return photoPreview;
     }
-
-    protected boolean isHide;
 
     @Override
     public void onClick(View v) {
@@ -302,6 +337,11 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
 
     //点击完成传递已选择数据回原activity中
     private void ok() {
+        //添加当选取为单选时,点击完成自动选取并返回
+        if (MAX_IMAGE == 1 && selected.size() == 0) {
+            PhotoModel photoModel = photos.get(current);
+            selected.add(photoModel);
+        }
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("photos", selected);
@@ -319,33 +359,6 @@ public class PhotoPreviewActivity extends Activity implements OnClickListener,
             finish();
         }
     }
-
-    /**
-     * 单击图片时全屏看图(显示隐藏title栏)
-     */
-    private OnClickListener photoItemClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (!isHide) {
-                new AnimationUtil(getApplicationContext(), R.anim.translate_up)
-                        .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
-                new AnimationUtil(getApplicationContext(), R.anim.translate_down)
-                        .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutBottom);
-                //设置全屏
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                isHide = true;
-            } else {
-                //取消全屏
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-                new AnimationUtil(getApplicationContext(), R.anim.translate_down_current)
-                        .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
-                new AnimationUtil(getApplicationContext(), R.anim.translate_up_current)
-                        .setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutBottom);
-                isHide = false;
-            }
-        }
-    };
 
     //图片选择事件
     @Override

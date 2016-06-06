@@ -6,20 +6,24 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Include following permission if you want to cache images on SD card -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--Read NetWork state for clear network image cache-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application android:allowBackup="true">
         <activity
             android:name="com.photoselector.ui.PhotoSelectorActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="图片选择"
-            android:theme="@style/PhotoSelectorTheme" />
+            android:label="图片选择" />
 
         <activity
             android:name="com.photoselector.ui.PhotoPreviewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="图片预览"
-            android:theme="@style/PhotoSelectorTheme" />
+            android:label="图片预览" />
+
+        <activity
+            android:name="com.clipImage.ClipImageActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="图片裁剪" />
     </application>
 
 </manifest>

@@ -19,7 +19,7 @@ import com.photoselector.util.NativeImageLoader;
  * @version V1.0
  * @ClassName: AlbumItem
  * @Description: 相册条目
- * @Date 2016/4/26 0026 13:38
+ * @Date 2016/4/26 0026 13:37
  */
 public class AlbumItem extends LinearLayout {
 
@@ -49,7 +49,7 @@ public class AlbumItem extends LinearLayout {
      */
     public void setAlbumImage(String path) {
 //		ImageLoader.getInstance().displayImage("file://" + path, ivAlbum);
-        NativeImageLoader.getInstance().loadImageBitmap(path, new Point(200, 200), true, new NativeImageLoader.NativeImageCallBack() {
+        NativeImageLoader.getInstance(getContext()).loadImageBitmap(path, new Point(200, 200), true, 0, new NativeImageLoader.NativeImageCallBack() {
             @Override
             public void onImageLoad(Bitmap bitmap, String path) {
                 ivAlbum.setImageBitmap(bitmap);

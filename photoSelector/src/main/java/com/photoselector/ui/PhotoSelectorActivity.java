@@ -45,15 +45,12 @@ public class PhotoSelectorActivity extends Activity implements
         OnClickListener {
 
     public static final String KEY_MAX = "key_max";
-    private int maxImage = 9;//最大选择图片数量,默认9
     public static final String SHOW_CAMERA = "show_camera";
-    private boolean showCamera = true;//是否显示相机，默认显示
-
     public static final int REQUEST_PREVIEW = 0;//预览请求码
     private static final int REQUEST_CAMERA = 1;//拍照请求码
-
     public static String RECCENT_PHOTO = null;//最近照片
-
+    private int maxImage = 9;//最大选择图片数量,默认9
+    private boolean showCamera = true;//是否显示相机，默认显示
     private GridView gvPhotos;
     private ListView lvAblum;
     private Button btnOk;
@@ -65,6 +62,27 @@ public class PhotoSelectorActivity extends Activity implements
     private ArrayList<PhotoModel> selected;
     private File mTmpFile;
     private Handler handler = new Handler();
+    //相册显示回调
+    private OnLocalAlbumListener albumListener = new OnLocalAlbumListener() {
+        @Override
+        public void onAlbumLoaded(List<AlbumModel> albums) {
+            albumAdapter.update(albums);
+        }
+    };
+    //图片显示回调
+    private OnLocalPhotoListener photoListener = new OnLocalPhotoListener() {
+        @Override
+        public void onPhotoLoaded(List<PhotoModel> photos) {
+            for (PhotoModel model : selected) {
+                if (photos.contains(model)) {
+                    model.setChecked(true);
+                }
+            }
+            photoAdapter.update(photos);
+            gvPhotos.smoothScrollToPosition(0); // 平滑滚动到第一个
+            // reset(); //--keep selected photos
+        }
+    };
 
     public static Bundle getBundle(int maxImage, boolean showCamera) {
         Bundle bundle = new Bundle();
@@ -83,6 +101,11 @@ public class PhotoSelectorActivity extends Activity implements
         if (getIntent().getExtras() != null) {
             maxImage = getIntent().getIntExtra(KEY_MAX, 9);
             showCamera = getIntent().getBooleanExtra(SHOW_CAMERA, true);
+        }
+
+        //当最大图片数为0并且显示相机时,直接进入拍照,并且拍照结束直接返回
+        if (maxImage == 0 && showCamera) {
+            catchPicture();
         }
 
         //可选使用ImageLoader时需要初始化ImageLoader
@@ -176,8 +199,15 @@ public class PhotoSelectorActivity extends Activity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_CANCELED) {
-            if (requestCode == REQUEST_CAMERA && mTmpFile != null && mTmpFile.exists()) {
-                mTmpFile.delete();
+            if (requestCode == REQUEST_CAMERA) {
+                //删除缓存文件
+                if (mTmpFile != null && mTmpFile.exists()) {
+                    mTmpFile.delete();
+                }
+                //当最大为0且显示相机,即单拍照模式,直接返回
+                if (maxImage <= 0 && showCamera) {
+                    onBackPressed();
+                }
             }
             return;
         }
@@ -200,6 +230,15 @@ public class PhotoSelectorActivity extends Activity implements
             // notify system
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(imageFile)));
 
+            //当最大为0(单拍照模式)且显示相机或最大为1(单选模式下使用了相机),设置相机图像并返回
+            if (maxImage <= 1 && showCamera) {
+                selected.clear();
+                PhotoModel photoModel = new PhotoModel();
+                photoModel.setChecked(true);
+                photoModel.setOriginalPath(imageFile.getAbsolutePath());
+                selected.add(photoModel);
+                ok();
+            }
             //延迟加载,等待系统数据库添加图片后读取
             handler.postDelayed(new Runnable() {
                 @Override
@@ -388,27 +427,4 @@ public class PhotoSelectorActivity extends Activity implements
     public interface OnLocalAlbumListener {
         void onAlbumLoaded(List<AlbumModel> albums);
     }
-
-    //相册显示回调
-    private OnLocalAlbumListener albumListener = new OnLocalAlbumListener() {
-        @Override
-        public void onAlbumLoaded(List<AlbumModel> albums) {
-            albumAdapter.update(albums);
-        }
-    };
-
-    //图片显示回调
-    private OnLocalPhotoListener photoListener = new OnLocalPhotoListener() {
-        @Override
-        public void onPhotoLoaded(List<PhotoModel> photos) {
-            for (PhotoModel model : selected) {
-                if (photos.contains(model)) {
-                    model.setChecked(true);
-                }
-            }
-            photoAdapter.update(photos);
-            gvPhotos.smoothScrollToPosition(0); // 平滑滚动到第一个
-            // reset(); //--keep selected photos
-        }
-    };
 }

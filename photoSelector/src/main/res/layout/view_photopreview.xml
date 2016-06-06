@@ -4,7 +4,7 @@
     android:id="@+id/layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#aa000000">
+    android:background="#ff202020">
 
     <com.polites.GestureImageView
         android:id="@+id/iv_content_vpp"

@@ -1,17 +1,19 @@
 package com.photoselector.util;
 
-import com.photoselector.ui.PhotoSelectorActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+
+import com.photoselector.ui.PhotoSelectorActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -194,6 +196,28 @@ public class CommonUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 是否能上网
+     *
+     * @param context
+     * @return 是否能上网
+     */
+    public static boolean hasConnectedNetwork(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null) {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null) {
+                for (int i = 0; i < info.length; i++) {
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }
